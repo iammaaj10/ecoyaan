@@ -1,26 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* ── Fonts ─────────────────────────────── */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'DM Sans', sans-serif;
+
+  /* ── Eco colour palette ─────────────────── */
+  --color-cream:        #F7F3ED;
+  --color-cream-dark:   #EDE7DB;
+
+  --color-bark:         #2B2214;
+  --color-bark-light:   #5A4E3A;
+  --color-bark-muted:   #8A7D6A;
+
+  --color-moss:         #3A5C38;
+  --color-moss-light:   #4D7A4B;
+  --color-moss-pale:    #EAF0E8;
+  --color-moss-border:  oklch(from #3A5C38 l c h / 18%);
+
+  --color-sage:         #8DAE8B;
+  --color-terra:        #C4714A;
+  --color-gold:         #B8972E;
+
+  /* ── Shadows ────────────────────────────── */
+  --shadow-card:        0 2px 12px oklch(from #2B2214 l c h / 8%);
+  --shadow-card-hover:  0 8px 32px oklch(from #2B2214 l c h / 14%);
+  --shadow-btn:         0 8px 24px oklch(from #3A5C38 l c h / 28%);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* ── Base ───────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  background-color: var(--color-cream);
+  color: var(--color-bark);
+  -webkit-font-smoothing: antialiased;
 }
+
+.font-display { font-family: var(--font-display); }
+
+/* ── Keyframes Tailwind v4 can't inline ─── */
+@keyframes fade-slide-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.88) translateY(16px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes check-bounce {
+  from { transform: scale(0) rotate(-25deg); }
+  to   { transform: scale(1) rotate(0deg); }
+}
+@keyframes spin-loader {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Animation utility classes ──────────── */
+.animate-fade-slide-up { animation: fade-slide-up 0.4s ease both; }
+.animate-pop-in        { animation: pop-in 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; }
+.animate-check-bounce  { animation: check-bounce 0.6s 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; }
+.animate-spin-loader   { animation: spin-loader 0.7s linear infinite; }
