@@ -1,16 +1,9 @@
-import { CartData } from "@/types/cart"
 import CartItem from "@/components/CartItem"
 import OrderSummary from "@/components/OrderSummary"
-
-async function getCartData(): Promise<CartData> {
-  const base = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
-  const res = await fetch(`${base}/api/cart`, { cache: "no-store" })
-  if (!res.ok) throw new Error("Failed to fetch cart")
-  return res.json()
-}
+import { cartData } from "@/data/cartData"
 
 export default async function CartPage() {
-  const data = await getCartData()
+  const data = cartData
   const subtotal = data.cartItems.reduce(
     (acc, item) => acc + item.product_price * item.quantity, 0
   )
