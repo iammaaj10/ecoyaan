@@ -3,10 +3,10 @@
 import { useState } from "react"
 import { useCheckout } from "@/context/CheckoutContext"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { cartData } from "@/data/cartData"
 import OrderSummary from "@/components/OrderSummary"
 import CartItem from "@/components/CartItem"
-import Link from "next/link"
 
 const PAYMENT_METHODS = [
   { id: "upi",  label: "UPI / Google Pay",    desc: "PhonePe, GPay, Paytm & more", icon: "UPI"  },
@@ -23,7 +23,7 @@ export default function PaymentPage() {
   const subtotal = cartData.cartItems.reduce(
     (acc, item) => acc + item.product_price * item.quantity, 0
   )
-  const total = subtotal + cartData.shipping_fee
+  const total = subtotal + cartData.shipping_fee - cartData.discount_applied
 
   const handlePay = () => {
     setPaying(true)
@@ -31,8 +31,9 @@ export default function PaymentPage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-10 py-10 md:py-14">
-      <h1 className="font-display text-4xl md:text-5xl font-medium text-[#2B2214] tracking-tight mb-1">
+    /* pb-28 so content isn't hidden behind sticky bar */
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-10 py-10 md:py-14 pb-28">
+      <h1 className="font-display text-3xl md:text-5xl font-medium text-[#2B2214] tracking-tight mb-1">
         Payment
       </h1>
       <p className="text-[#8A7D6A] text-sm font-light mb-8">
@@ -54,7 +55,7 @@ export default function PaymentPage() {
                   <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
                     <path d="M7.5 1.5l2 2L3 10H1V8L7.5 1.5Z" stroke="currentColor" strokeWidth="1" strokeLinejoin="round"/>
                   </svg>
-                  Edit
+                  Change
                 </Link>
               </div>
             </div>
@@ -101,7 +102,6 @@ export default function PaymentPage() {
               </h2>
             </div>
             <div className="px-6 py-5 flex flex-col gap-3">
-
               {PAYMENT_METHODS.map(pm => (
                 <button
                   key={pm.id}
@@ -113,10 +113,7 @@ export default function PaymentPage() {
                       : "border-[#5A4E3A]/15 bg-white hover:border-[#3A5C38]/40 hover:bg-[#EAF0E8]/50"}`}
                 >
                   <div className={`w-[18px] h-[18px] rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all
-                    ${method === pm.id
-                      ? "border-[#3A5C38] bg-[#3A5C38]"
-                      : "border-[#5A4E3A]/30"}`}
-                  >
+                    ${method === pm.id ? "border-[#3A5C38] bg-[#3A5C38]" : "border-[#5A4E3A]/30"}`}>
                     {method === pm.id && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                   </div>
                   <div className="w-9 h-6 bg-[#EDE7DB] rounded flex items-center justify-center text-[9px] font-bold text-[#2B2214] tracking-tight flex-shrink-0">
@@ -129,29 +126,7 @@ export default function PaymentPage() {
                 </button>
               ))}
 
-              {/* Pay button */}
-              <button
-                onClick={handlePay}
-                disabled={paying || !address}
-                className="mt-2 w-full flex items-center justify-center gap-2 bg-[#3A5C38] hover:bg-[#4D7A4B] disabled:opacity-70 text-white text-sm font-medium tracking-widest uppercase rounded-xl py-3.5 transition-all hover:-translate-y-px hover:shadow-[0_8px_24px_rgba(58,92,56,0.28)] active:translate-y-0 disabled:hover:translate-y-0 disabled:cursor-not-allowed"
-              >
-                {paying ? (
-                  <>
-                    <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin-loader" />
-                    Processing Payment…
-                  </>
-                ) : (
-                  <>
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <rect x="1" y="4" width="12" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
-                      <path d="M1 7h12M4.5 4V3a2.5 2.5 0 015 0v1" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-                    </svg>
-                    Pay Securely · ₹{total.toLocaleString()}
-                  </>
-                )}
-              </button>
-
-              <div className="flex items-center justify-center gap-4">
+              <div className="flex items-center justify-center gap-4 pt-1 flex-wrap">
                 {["🔒 256-bit SSL", "✅ PCI-DSS", "🌿 Carbon Neutral"].map(t => (
                   <span key={t} className="text-[11px] text-[#8A7D6A]">{t}</span>
                 ))}
@@ -160,12 +135,58 @@ export default function PaymentPage() {
           </div>
         </div>
 
-        {/* Summary sidebar */}
-        <OrderSummary
-          subtotal={subtotal}
-          shipping={cartData.shipping_fee}
-          discount={cartData.discount_applied}
-        />
+        {/* Summary sidebar — desktop only */}
+        <div className="hidden lg:block">
+          <OrderSummary
+            subtotal={subtotal}
+            shipping={cartData.shipping_fee}
+            discount={cartData.discount_applied}
+          />
+        </div>
+      </div>
+
+      {/* ── STICKY BOTTOM ACTION BAR ── */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#F7F3ED]/95 backdrop-blur-md border-t border-[#5A4E3A]/15 px-4 py-3 shadow-[0_-4px_20px_rgba(43,34,20,0.10)]">
+        <div className="max-w-5xl mx-auto flex items-center justify-between gap-3">
+
+          {/* Total — visible on mobile */}
+          <div className="flex flex-col leading-tight lg:hidden">
+            <span className="text-[10px] text-[#8A7D6A] uppercase tracking-widest font-semibold">Total</span>
+            <span className="text-base font-bold text-[#2B2214]">₹{total.toLocaleString()}</span>
+          </div>
+
+          <div className="flex items-center gap-3 ml-auto">
+            <Link
+              href="/checkout"
+              className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-[#5A4E3A] bg-white border border-[#5A4E3A]/20 rounded-xl hover:bg-[#EDE7DB] transition-all no-underline"
+            >
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M9 2L4 7l5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span className="hidden sm:inline">Back to Address</span>
+              <span className="sm:hidden">Back</span>
+            </Link>
+
+            <button
+              onClick={handlePay}
+              disabled={paying || !address}
+              className="flex items-center gap-2 bg-[#3A5C38] hover:bg-[#4D7A4B] disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-medium tracking-widest uppercase rounded-xl px-5 py-2.5 transition-all hover:-translate-y-px hover:shadow-[0_6px_20px_rgba(58,92,56,0.30)] active:translate-y-0"
+            >
+              {paying ? (
+                <><span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />Processing…</>
+              ) : (
+                <>
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <rect x="1" y="4" width="12" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
+                    <path d="M1 7h12M4.5 4V3a2.5 2.5 0 015 0v1" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+                  </svg>
+                  <span className="hidden sm:inline">Pay Securely · ₹{total.toLocaleString()}</span>
+                  <span className="sm:hidden">Pay · ₹{total.toLocaleString()}</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   )
