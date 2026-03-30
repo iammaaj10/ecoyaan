@@ -31,7 +31,7 @@ export default function PaymentPage() {
   }
 
   return (
-    /* pb-28 so content isn't hidden behind sticky bar */
+    
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-10 py-10 md:py-14 pb-28">
       <h1 className="font-display text-3xl md:text-5xl font-medium text-[#2B2214] tracking-tight mb-1">
         Payment
@@ -43,7 +43,7 @@ export default function PaymentPage() {
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6 items-start">
         <div className="flex flex-col gap-5">
 
-          {/* Delivery address */}
+        
           <div className="bg-white rounded-2xl border border-[#5A4E3A]/10 shadow-[0_2px_12px_rgba(43,34,20,0.08)]">
             <div className="px-6 pt-5">
               <div className="flex items-center justify-between border-b border-[#5A4E3A]/10 pb-4">
@@ -80,7 +80,7 @@ export default function PaymentPage() {
             </div>
           </div>
 
-          {/* Order items */}
+         
           <div className="bg-white rounded-2xl border border-[#5A4E3A]/10 shadow-[0_2px_12px_rgba(43,34,20,0.08)]">
             <div className="px-6 pt-5">
               <h2 className="font-display text-lg font-medium text-[#2B2214] border-b border-[#5A4E3A]/10 pb-4">
@@ -94,7 +94,7 @@ export default function PaymentPage() {
             </div>
           </div>
 
-          {/* Payment method */}
+          
           <div className="bg-white rounded-2xl border border-[#5A4E3A]/10 shadow-[0_2px_12px_rgba(43,34,20,0.08)]">
             <div className="px-6 pt-5">
               <h2 className="font-display text-lg font-medium text-[#2B2214] border-b border-[#5A4E3A]/10 pb-4">
@@ -135,7 +135,7 @@ export default function PaymentPage() {
           </div>
         </div>
 
-        {/* Summary sidebar — desktop only */}
+       
         <div className="hidden lg:block">
           <OrderSummary
             subtotal={subtotal}
@@ -145,11 +145,11 @@ export default function PaymentPage() {
         </div>
       </div>
 
-      {/* ── STICKY BOTTOM ACTION BAR ── */}
+      
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#F7F3ED]/95 backdrop-blur-md border-t border-[#5A4E3A]/15 px-4 py-3 shadow-[0_-4px_20px_rgba(43,34,20,0.10)]">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-3">
 
-          {/* Total — visible on mobile */}
+          
           <div className="flex flex-col leading-tight lg:hidden">
             <span className="text-[10px] text-[#8A7D6A] uppercase tracking-widest font-semibold">Total</span>
             <span className="text-base font-bold text-[#2B2214]">₹{total.toLocaleString()}</span>

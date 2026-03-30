@@ -11,7 +11,6 @@ export default function SuccessPage() {
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12">
       <div className="bg-white rounded-3xl border border-[#5A4E3A]/10 shadow-[0_8px_32px_rgba(43,34,20,0.14)] px-8 py-10 max-w-md w-full text-center animate-pop-in">
 
-        {/* Check icon */}
         <div className="w-20 h-20 rounded-full bg-[#EAF0E8] border border-[#3A5C38]/18 flex items-center justify-center mx-auto mb-6 animate-check-bounce">
           <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
             <circle cx="19" cy="19" r="18" stroke="#3A5C38" strokeWidth="1.5"/>
@@ -26,12 +25,12 @@ export default function SuccessPage() {
           Thank you for choosing eco-friendly. Your order is confirmed and will be packed with 100% plastic-free materials. 🌿
         </p>
 
-        {/* Order ID */}
+        
         <div className="inline-block bg-[#F7F3ED] border border-[#5A4E3A]/10 rounded-xl px-5 py-2.5 font-mono text-sm font-bold text-[#3A5C38] tracking-widest mb-6">
           Order #{orderId}
         </div>
 
-        {/* Delivery estimate */}
+        
         <div className="flex items-start gap-3 bg-[#EAF0E8] border border-[#3A5C38]/18 rounded-xl px-4 py-3.5 text-left mb-6">
           <span className="text-2xl leading-none">📦</span>
           <div>
@@ -51,7 +50,7 @@ export default function SuccessPage() {
           Continue Shopping
         </Link>
 
-        {/* Tree planting */}
+       
         <div className="flex items-center justify-center gap-2 text-xs text-[#8A7D6A] bg-[#F7F3ED] rounded-xl px-4 py-3">
           <span>🌱</span>
           <span>

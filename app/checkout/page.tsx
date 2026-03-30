@@ -18,7 +18,7 @@ export default function CheckoutPage() {
   const router = useRouter()
   const { addresses, selectedAddressId, addAddress, updateAddress, deleteAddress, selectAddress } = useCheckout()
 
-  // UI state
+
   const [mode, setMode] = useState<"list" | "new" | "edit">(
     addresses.length === 0 ? "new" : "list"
   )
@@ -92,7 +92,7 @@ export default function CheckoutPage() {
   const cls = (f: keyof Address) => `${inputBase} ${errors[f] ? inputErr : inputOk}`
 
   return (
-    /* pb-28 so content isn't hidden behind sticky bar */
+    
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-10 py-10 md:py-14 pb-28">
       <h1 className="font-display text-3xl md:text-5xl font-medium text-[#2B2214] tracking-tight mb-1">
         Shipping Details
@@ -147,7 +147,7 @@ export default function CheckoutPage() {
             </div>
           )}
 
-          {/* ── ADD / EDIT FORM ── */}
+          
           {(mode === "new" || mode === "edit") && (
             <div className="bg-white rounded-2xl border border-[#5A4E3A]/10 shadow-[0_2px_12px_rgba(43,34,20,0.08)]">
               <div className="px-6 pt-5">
@@ -231,7 +231,7 @@ export default function CheckoutPage() {
           )}
         </div>
 
-        {/* SUMMARY SIDEBAR — hidden on mobile (shown above sticky bar) */}
+       
         <div className="hidden lg:block">
           <OrderSummary
             subtotal={subtotal}
@@ -241,10 +241,10 @@ export default function CheckoutPage() {
         </div>
       </div>
 
-      {/* ── STICKY BOTTOM ACTION BAR ── */}
+      
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#F7F3ED]/95 backdrop-blur-md border-t border-[#5A4E3A]/15 px-4 py-3 shadow-[0_-4px_20px_rgba(43,34,20,0.10)]">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-3">
-          {/* Order total — visible on mobile */}
+          
           <div className="flex flex-col leading-tight lg:hidden">
             <span className="text-[10px] text-[#8A7D6A] uppercase tracking-widest font-semibold">Total</span>
             <span className="text-base font-bold text-[#2B2214]">
@@ -288,7 +288,7 @@ export default function CheckoutPage() {
   )
 }
 
-/* ── Address Card ── */
+
 function AddressCard({
   addr, selected, onSelect, onEdit, onDelete
 }: {
@@ -306,13 +306,13 @@ function AddressCard({
           ? "border-[#3A5C38] bg-[#EAF0E8]"
           : "border-[#5A4E3A]/15 bg-[#F7F3ED] hover:border-[#3A5C38]/40 hover:bg-[#EAF0E8]/50"}`}
     >
-      {/* Radio */}
+      
       <div className={`mt-0.5 w-[18px] h-[18px] rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all
         ${selected ? "border-[#3A5C38] bg-[#3A5C38]" : "border-[#5A4E3A]/30 bg-white"}`}>
         {selected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
       </div>
 
-      {/* Details */}
+      
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold text-[#2B2214]">{addr.name}</p>
         <p className="text-xs text-[#5A4E3A] mt-0.5 leading-relaxed">
@@ -321,7 +321,7 @@ function AddressCard({
         <p className="text-xs text-[#8A7D6A]">+91 {addr.phone} · {addr.email}</p>
       </div>
 
-      {/* Actions */}
+     
       <div className="flex items-center gap-1.5 flex-shrink-0" onClick={e => e.stopPropagation()}>
         <button
           onClick={onEdit}
