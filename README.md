@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ecoyaan Checkout Flow
 
-## Getting Started
+A take-home assignment built for Ecoyaan's frontend engineering interview. The task was to build a simplified checkout flow — cart, address form, payment confirmation, and a success screen.
 
-First, run the development server:
+Live demo: [ecoyaan-checkout.vercel.app](https://ecoyaan-checkout.vercel.app)
+
+---
+
+## Stack
+
+- Next.js 15 (App Router)
+- TypeScript
+- Tailwind CSS v4
+- React Context API
+
+---
+
+## Running locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How it works
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The app has four pages:
 
-## Learn More
+**`/`** — Cart page. Fetches cart data server-side via an internal API route (`/api/cart`) using a Next.js Server Component with `cache: "no-store"`, so it's always fresh on each request. Shows items, subtotal, shipping, and a breakdown.
 
-To learn more about Next.js, take a look at the following resources:
+**`/checkout`** — Address form. Client component with inline validation (required fields, email format, 10-digit phone, 6-digit PIN). Errors show per-field on submit, and clear as soon as you start correcting them. On success, the address gets saved to context and the user is pushed to the next step.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**`/payment`** — Shows the saved address, order items again, and three payment method options (UPI, card, COD). The pay button is disabled if no address is in context — so if someone navigates here directly, it won't let them through.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**`/success`** — Confirmation screen with an animated check, a generated order ID, and an estimated delivery window.
 
-## Deploy on Vercel
+State (cart + address) is kept in a `CheckoutContext` that wraps the whole app in `layout.tsx`. Nothing fancy — just `useState` under the hood since the scope is small enough that it didn't need anything heavier.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## File structure
+
+```
+src/
+├── app/
+│   ├── globals.css
+│   ├── layout.tsx
+│   ├── page.tsx               # Cart (SSR)
+│   ├── checkout/page.tsx
+│   ├── payment/page.tsx
+│   ├── success/page.tsx
+│   └── api/cart/route.ts
+├── components/
+│   ├── Nav.tsx
+│   ├── CartItem.tsx
+│   └── OrderSummary.tsx
+├── context/
+│   └── CheckoutContext.tsx
+├── data/
+│   └── cartData.ts
+└── types/
+    ├── cart.ts
+    └── address.ts
+```
+
+---
+
+## A few decisions worth mentioning
+
+**Why a local API route instead of importing the data directly in the Server Component?**
+The brief asked for SSR data fetching, and hitting an API route (even an internal one) felt closer to how this would actually work with a real backend. Easy to swap the URL for a real endpoint later.
+
+**Why Context API and not Zustand/Redux?**
+Three pages, two pieces of state. Bringing in an external state library would've been overkill.
+
+**Why SVG product images?**
+The mock data had placeholder URLs. I generated local SVGs instead so the images actually load and look intentional, without depending on an external service.
